@@ -1,0 +1,6 @@
+.venv
+*.exe
+*.ilk
+*.obj
+*.pdb
+build/
