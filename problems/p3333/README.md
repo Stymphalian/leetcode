@@ -24,7 +24,7 @@ we could then easily compute what we want (`atleast k`) by doing `total - (atmos
 5. Figuring out how to compute `atmost-k` is the hardest part of this problem. One possible 
 solution is to use `Dynamic Programming` to count the number of possible strings.
 From my internet browsing I have seen that you can also think of the `atmost-k`
-counting as a variation of the `unbounded knapsack` problem.
+counting as a variation of the `bounded knapsack` problem.
 6. Using `DP` directly is also too slow. In the end you will find that it will be will around `O(n * k * k)`
 7. By using a `prefix sum` we can reduce this to `O(n*k)`.
 
@@ -141,9 +141,9 @@ We also needed always include atleast 1 letter from the previous segment.
 
 This is the recurrence described above.
   DP["BBB"][3] = (                     DP[segment_index][str_len] = (
-      DP["AAA][2] +         ==              DP[segment_index-1][str_len-1] +
-      DP["AAA][1] +         ==              DP[segment_index-1][str_len-2] +
-      DP["AAA][0]                           DP[segment_index-1][str_len-3] 
+      DP["AAA"][2] +         ==              DP[segment_index-1][str_len-1] +
+      DP["AAA"][1] +         ==              DP[segment_index-1][str_len-2] +
+      DP["AAA"][0]                           DP[segment_index-1][str_len-3] 
   )                                    )
 
 As you can probably see the `str_len-x` is just ensuring we only add the 
