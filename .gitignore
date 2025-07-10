@@ -5,3 +5,5 @@
 *.pdb
 build/
 .vscode/settings.json
+csharp/
+csharp.sln
