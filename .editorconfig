@@ -2,5 +2,7 @@ root = true
 [*.cs]
 dotnet_separate_import_directive_groups = true
 dotnet_sort_system_directives_first = true
-csharp_new_line_before_catch = false
 csharp_new_line_before_open_brace  = false
+csharp_new_line_before_catch = false
+csharp_new_line_before_else = false
+csharp_new_line_before_finally = false
