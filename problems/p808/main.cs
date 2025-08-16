@@ -36,6 +36,38 @@ public class Solution
         return prob / 4.0;
     }
 
+    public double Editorial(int n) {
+        const double TOLERANCE = 1e-5;
+        int m = (int)Math.Ceiling(n / 25.0);
+        Dictionary<(int, int), double> dp = [];
+
+        var func = (int a, int b) => {
+            return (
+                dp[(Math.Max(0, a - 4), b)] +
+                dp[(Math.Max(0, a - 3), Math.Max(b - 1, 0))] +
+                dp[(Math.Max(0, a - 2), Math.Max(b - 2, 0))] +
+                dp[(Math.Max(0, a - 1), Math.Max(b - 3, 0))]
+            ) / 4.0;
+        };
+        dp[(0, 0)] = 0.5; // n == 0, both finish at the same time.
+
+        for (int a = 1; a <= m; a++) {
+            dp[(0, a)] = 1.0;
+            dp[(a, 0)] = 0.0;
+
+            for (int b = 1; b <= a; b++) {
+                dp[(b, a)] = func(b, a);
+                dp[(a, b)] = func(a, b);
+            }
+
+            if ((1.0 - dp[(a, a)]) < TOLERANCE) {
+                return 1.0;
+            }
+        }
+
+        return dp[(m, m)];
+    }
+
     public double SoupServings(int n)
     {
         if (n > 5000) { return 1.0; }
