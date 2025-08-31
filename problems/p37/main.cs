@@ -1,14 +1,18 @@
 
-// 37. Sudoku Solver
-// https://leetcode.com/problems/sudoku-solver/description/
-// Difficulty: Hard
-// Time Taken: 01:12:14
+// 3195 Find the Mininum Area to Cover All Ones I
+// https://leetcode.com/problems/find-the-minimum-area-to-cover-all-ones-i/description
+// Difficulty: Medium??
+// Time Taken: 00:20:15
 
 using System.Globalization;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
 public class Solution {
+
+    int[,] usedRows = new int[9, 10];
+    int[,] usedCols = new int[9, 10];
+    int[,] usedSquares = new int[9, 10];
 
     public bool checkRowForNum(char[][] chars, int targetRow, int targetNum) {
         for (int col = 0; col < chars[targetRow].Length; col++) {
@@ -28,15 +32,15 @@ public class Solution {
 
     public bool checkSquareForNum(char[][] chars, int targetRowOrig, int targetColOrig, int targetNum) {
         var (targetRow, targetCol) = getSquareIndexFromCoords(targetRowOrig, targetColOrig);
-        for (int row = targetRow*3; row < targetRow*3 + 3; row++) {
-            for (int col = targetCol*3; col < targetCol*3 + 3; col++) {
+        for (int row = targetRow * 3; row < targetRow * 3 + 3; row++) {
+            for (int col = targetCol * 3; col < targetCol * 3 + 3; col++) {
                 if (chars[row][col] == '.') continue;
                 if (chars[row][col] - '0' == targetNum) return true;
             }
         }
         return false;
     }
-    
+
     public (int, int) getSquareIndexFromCoords(int row, int col) {
         int squareRow = row / 3;
         int squareCol = col / 3;
@@ -97,62 +101,66 @@ public class Solution {
         return true;
     }
 
-    public bool CanSolve(char[][] board, int[] remaining, int numRemaining, List<(int, int)> spaces, int spaceIndex) {
+
+    public bool canPlace(char[][] board, int row, int col, int targetNum) {
+        // if (checkRowForNum(board, row, targetNum)) return false;
+        // if (checkColForNum(board, col, targetNum)) return false;
+        // if (checkSquareForNum(board, row, col, targetNum)) return false;
+        // return true;
+        int idx = (row / 3) * 3 + (col / 3);
+        return usedRows[row, targetNum] + usedCols[col, targetNum] + usedSquares[idx, targetNum] == 0;
+    }
+
+    public void placeNum(char[][] board, int row, int col, int targetNum) {
+        usedRows[row, targetNum] += 1;
+        usedCols[col, targetNum] += 1;
+        usedSquares[(row / 3)*3 +  (col / 3), targetNum] += 1;
+        board[row][col] = (char)(targetNum + '0');
+    }
+    public void removeNum(char[][] board, int row, int col, int targetNum) {
+        usedRows[row, targetNum] -= 1;
+        usedCols[col, targetNum] -= 1;
+        usedSquares[(row / 3)*3 +  (col / 3), targetNum] -= 1;
+        board[row][col] = '.';
+    }
+
+    public bool CanSolve(char[][] board, List<(int, int)> spaces, int spaceIndex) {
         if (spaceIndex >= spaces.Count) {
             return checkConditions(board);
+            // if (!checkConditions(board)) {
+            //     throw new Exception("Invalid board");
+            // }
+            // return true;
         }
-
-        // PrintBoard(board);
 
         int row = spaces[spaceIndex].Item1;
         int col = spaces[spaceIndex].Item2;
-        for (int cand = 1; cand <= remaining.Length; cand++) {
-            if (remaining[cand - 1] == 0) continue;
-            if (checkColForNum(board, col, cand)) {
-                continue;
+        for (int cand = 1; cand <= 9; cand++) {
+            if (canPlace(board, row, col, cand)) {
+                placeNum(board, row, col, cand);
+                if (CanSolve(board, spaces, spaceIndex + 1)) return true;
+                removeNum(board, row, col, cand);
             }
-            if (checkRowForNum(board, row, cand)) {
-                continue;
-            }
-            if (checkSquareForNum(board, row, col, cand)) {
-                continue;
-            }
-
-            board[row][col] = (char)(cand + '0');
-            remaining[cand - 1]--;
-            numRemaining--;
-
-            if (CanSolve(board, remaining, numRemaining, spaces, spaceIndex + 1)) return true;
-
-            board[row][col] = '.';
-            remaining[cand - 1]++;
-            numRemaining++;
         }
 
         return false;
     }
 
     public void SolveSudoku(char[][] board) {
-        int[] remaining = new int[9];
-        int remainingCount = 0;
-        for (int i = 0; i < 9; i++) {
-            remaining[i] = 9;
-        }
         List<(int, int)> spaces = new();
-
         for (int row = 0; row < board.Length; row++) {
             for (int col = 0; col < board[row].Length; col++) {
                 if (board[row][col] == '.') {
                     spaces.Add((row, col));
                 } else {
-                    int num = board[row][col] - '0';
-                    remaining[num - 1]--;
-                    remainingCount++;
-                }   
+                    int targetNum = board[row][col] - '0';
+                    placeNum(board, row, col, targetNum);
+                }
+
             }
         }
 
-        CanSolve(board, remaining, remainingCount, spaces, 0);
+        CanSolve(board, spaces, 0);
     }
 
     public void PrintBoard(char[][] board) {
@@ -188,7 +196,6 @@ public class MainClass {
         };
 
         foreach (var c in cases) {
-
 
             char[][] caseDoubleArray = new char[9][];
             for (int i = 0; i < 9; i++) {
