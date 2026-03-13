@@ -1,5 +1,6 @@
-
-// https://leetcode.com/problems/minimum-number-of-seconds-to-make-mountain-height-zero/description
+// 3296 Minimum Number of Seconds to Make Mountain Height Zero
+// https://leetcode.com/problems/minimum-number-of-seconds-to-make-mountain-height-zero/description/
+// Difficulty: Medium
 // Time Taken: 00:55:42
 
 public class Solution {
@@ -70,3 +71,5 @@ public class MainClass {
     Console.WriteLine(result); // 15
   }
 };
+
+  
