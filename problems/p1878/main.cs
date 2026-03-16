@@ -5,12 +5,66 @@
 
 public class Solution {
 
-  public int GetRhombusSize(int x, int y, int size, int[][] grid) {
+  public int[] GetBiggestThree(int[][] grid) {
+    int height = grid.Length;
+    int width = grid[0].Length;
+    
+
+    int[][] DiagToRight = new int[height][];
+    int[][] DiagToLeft = new int[height][];
+    for(int y = 0; y < height; y++) {
+      DiagToRight[y] = new int[width];
+      DiagToLeft[y] = new int[width];
+      for(int x = 0; x < width; x++) {
+        int diagRight = (y-1 >= 0 && x-1 >= 0) ? DiagToRight[y-1][x-1]  : 0;
+        int diagLeft = (y-1 >= 0 && x+1 < width) ? DiagToLeft[y-1][x+1]  : 0;
+        DiagToRight[y][x] = diagRight + grid[y][x];
+        DiagToLeft[y][x] = diagLeft + grid[y][x];
+      }
+    }
+
+    var GetRhombusSize = (int x, int y, int size) => {
+      if (size == 0) {
+        return grid[y][x];
+      }
+      int right = x + size;
+      int left = x - size;
+      int mid = y + size;
+      int bottom = y + 2*size;
+
+      int topToRight = DiagToRight[mid][right] - DiagToRight[y][x] + grid[y][x];
+      int topToLeft = DiagToLeft[mid][left] - DiagToLeft[y][x] + grid[y][x];
+      int midToRight = DiagToRight[bottom][x] - DiagToRight[mid][left] + grid[mid][left];
+      int midToLeft = DiagToLeft[bottom][x] - DiagToLeft[mid][right] + grid[mid][right];
+      int duplicated = grid[y][x] + grid[mid][left] + grid[mid][right] + grid[bottom][x];
+      int sum = topToRight + topToLeft + midToRight + midToLeft - duplicated;
+      return sum;
+    };
+
+    // Use precomputed diagonal prefix sum to find the rhombus size
+    int maxSize = (int)Math.Max(Math.Ceiling(height / 2.0), Math.Ceiling(width / 2.0));
+    HashSet<int> sizes = new HashSet<int>();
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        for (int size = 0; size <= maxSize; size++) {
+          if (x - size < 0 || x + size >= width || y + 2 * size >= height) {
+            break;
+          }
+          sizes.Add(GetRhombusSize(x, y, size));
+        }
+      }
+    }
+    int[] answer = [.. sizes.ToList().OrderDescending().Take(3)];
+    return answer;
+  }
+
+
+  public int GetRhombusSizeBrute(int x, int y, int size, int[][] grid) {
     if (size == 0) {
       return grid[y][x];
     }
 
-    int bottom = y + 2*size;
+    int bottom = y + 2 * size;
     int sum = grid[y][x] + grid[bottom][x];
     int count = 2;
 
@@ -49,20 +103,21 @@ public class Solution {
     return sum;
   }
 
-  public int[] GetBiggestThree(int[][] grid) {
+  public int[] BruteForce(int[][] grid) {
     int height = grid.Length;
     int width = grid[0].Length;
-    int maxSize = Math.Max(height, width);
+    int maxSize = (int)Math.Max(Math.Ceiling(height / 2.0), Math.Ceiling(width / 2.0));
 
     // Brute force
     HashSet<int> sizes = new HashSet<int>();
-    for (int size = maxSize; size >= 0; size--) {
-      for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-          if (x - size < 0 || x + size >= width || y + 2*size >= height) {
-            continue;
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        for (int size = 0; size <= maxSize; size++) {
+          if (x - size < 0 || x + size >= width || y + 2 * size >= height) {
+            break;
           }
-          sizes.Add(GetRhombusSize(x, y, size, grid));
+          sizes.Add(GetRhombusSizeBrute(x, y, size, grid));
         }
       }
     }
@@ -79,7 +134,7 @@ public class MainClass {
     testcase4();
   }
 
-  public static void PrintArray<T> ( T[] array ) {
+  public static void PrintArray<T>(T[] array) {
     Console.WriteLine($"[{string.Join(", ", array)}]");
   }
 
