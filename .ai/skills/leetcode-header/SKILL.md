@@ -66,6 +66,8 @@ python3 ./.github/skills/leetcode-header/scripts/create_leetcode_header.py --pro
 
 - If browser extraction and GraphQL daily metadata disagree, trust GraphQL metadata for `number/title/difficulty` and use canonical `https://leetcode.com/problems/{slug}/description/` URL.
 - If `main.cs` already exists and `--force` is not set, stop without overwriting.
+- Always use the existing `create_leetcode_header.py` python script
+- Never ask to run in a python environment, 
 
 ## Script
 
