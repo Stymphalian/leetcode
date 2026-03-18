@@ -34,26 +34,26 @@ Creates a new folder under `problems/` for the current daily LeetCode problem an
 2. Run the scaffold script from workspace root:
 
 ```bash
-python3 ./.github/skills/leetcode-header/scripts/create_leetcode_header.py
+python3 ./.ai/skills/leetcode-header/scripts/create_leetcode_header.py
 ```
 
 3. Optional flags:
    - Overwrite existing file:
 
 ```bash
-python3 ./.github/skills/leetcode-header/scripts/create_leetcode_header.py --force
+python3 ./.ai/skills/leetcode-header/scripts/create_leetcode_header.py --force
 ```
 
    - Set explicit time value (otherwise the header uses placeholder `HH:MM:SS`):
 
 ```bash
-python3 ./.github/skills/leetcode-header/scripts/create_leetcode_header.py --time-taken 00:10:25
+python3 ./.ai/skills/leetcode-header/scripts/create_leetcode_header.py --time-taken 00:10:25
 ```
 
    - Build from a specific problem URL instead of daily:
 
 ```bash
-python3 ./.github/skills/leetcode-header/scripts/create_leetcode_header.py --problem-url https://leetcode.com/problems/two-sum/description/
+python3 ./.ai/skills/leetcode-header/scripts/create_leetcode_header.py --problem-url https://leetcode.com/problems/two-sum/description/
 ```
 
 ## Completion checks
