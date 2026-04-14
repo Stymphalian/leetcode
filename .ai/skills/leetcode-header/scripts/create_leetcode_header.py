@@ -174,6 +174,7 @@ def main() -> int:
     target_file.write_text(content, encoding="utf-8")
 
     print(f"Created: {target_file}")
+    print(f"URL: {url}")
     return 0
 
 
