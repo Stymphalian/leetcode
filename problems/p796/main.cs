@@ -26,6 +26,70 @@ public class Solution {
   }
 }
 
+public class Solution2 {
+  // RabinKarp rolling hash algorithm
+
+  public long Hash(string s, int len, int Base, int mod) {
+    long h = 0;
+    for(int index = 0; index < len; index++) {
+      int intChar = s[index] - 'a';
+      h = (h * Base + intChar) % mod;
+    }
+    return h;
+  }
+
+  public bool DoubleCheck(string s, string target, int offset) {
+    for(int index = 0; index < target.Length; index++) {
+      if (s[index + offset] != target[index]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public bool Contains(string source, string target) {
+    int Base = 256;
+    int M = target.Length;
+    int N = source.Length;
+    if (M > N) {return false;}
+    int Mod = 5381; // Better to use a very large prime
+
+    int BaseToPowerM = 1;
+    for(int index = 1; index <= M-1; index++) {
+      BaseToPowerM = (Base * BaseToPowerM) % Mod;
+    }
+    long targetHash = Hash(target, M, Base, Mod);
+    long sourceHash = Hash(source, M, Base, Mod);
+
+    // Early exit
+    if (targetHash == sourceHash && DoubleCheck(source, target, 0)) {
+      return true;
+    }
+
+    for(int index = M; index < N; index++) {
+      // Remove leading character from the Hash
+      int leading = source[index - M] - 'a';
+      sourceHash = (sourceHash + Mod - (BaseToPowerM*leading % Mod)) % Mod;
+      // Add the lagging character from the Hash
+      int lagging = source[index] - 'a';
+      sourceHash = (sourceHash * Base + lagging) % Mod;
+
+      int offset = index - M + 1;
+      if (targetHash == sourceHash && DoubleCheck(source, target, offset)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public bool RotateString(string s, string goal) {
+    if (s.Length != goal.Length) { return false; }
+    string s_goal = s + s;
+    return Contains(s_goal, goal);   
+  }
+}
+
+
 
 public class MainClass {
 
