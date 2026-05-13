@@ -1,6 +1,6 @@
-// 1665 Minimum Initial Energy to Finish Tasks
-// https://leetcode.com/problems/minimum-initial-energy-to-finish-tasks/description/
-// Difficulty: Hard
+// 1674 Minimum Moves to Make Array Complementary
+// https://leetcode.com/problems/minimum-moves-to-make-array-complementary/description/
+// Difficulty: Medium
 // Time Taken: 02;45:45
 
 // Why do I even try.
@@ -134,4 +134,3 @@ public class MainClass {
     Console.WriteLine("]");
   }
 };
-
