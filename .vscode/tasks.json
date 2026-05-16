@@ -1,6 +1,16 @@
 {
     "tasks": [
         {
+            "type": "shell",
+            "label": "tsc: build active ts file",
+            "command": "npm run build -- --outDir dist",
+            "options": {
+                "cwd": "${workspaceFolder}/ts"
+            },
+            "problemMatcher": ["$tsc"],
+            "group": "build"
+        },
+        {
             "type": "cppbuild",
             "label": "C/C++: cl.exe build active file",
             "command": "cl.exe",

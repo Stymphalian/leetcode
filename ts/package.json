@@ -1,0 +1,12 @@
+{
+  "name": "leetcode-ts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.15.17"
+  }
+}

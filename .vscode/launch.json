@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run TS file",
+            "preLaunchTask": "tsc: build active ts file",
+            "program": "${workspaceFolder}/ts/dist/${fileBasenameNoExtension}.js",
+            "outFiles": ["${workspaceFolder}/ts/dist/**/*.js"],
+            "cwd": "${workspaceFolder}/ts",
+            "console": "integratedTerminal",
+            "sourceMaps": true
+        }
+    ]
+}
