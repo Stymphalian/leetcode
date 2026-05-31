@@ -3,7 +3,34 @@
 // Difficulty: Medium
 // Time Taken: 00:07:42
 
+function asteroidsDestroyed2(mass: number, asteroids: number[]): boolean {
+  let limit = mass;
+  for(let idx = 0; idx < asteroids.length; idx++) {
+    limit = Math.max(limit, asteroids[idx])
+  }
+  let prefixSum: number[] = new Array(limit).fill(0);
+  prefixSum[0] = mass;
+  // prefixSum[limit] = -mass;
 
+  for (let idx = 0; idx < asteroids.length; idx++) {
+    let m = asteroids[idx];
+    prefixSum[m] += m;
+    // prefixSum[limit] -= m;
+  }
+
+  for (let idx = 0; idx < limit; idx++) {
+    const prev = (idx-1 >= 0) ? prefixSum[idx-1] : 0;
+    prefixSum[idx] = prev + prefixSum[idx];
+  }
+
+  for(let idx = 0; idx < limit; idx++) {
+    if(prefixSum[idx] < (idx+1)) {
+      return false;
+    }
+  }
+  
+  return true;
+};
 
 function asteroidsDestroyed(mass: number, asteroids: number[]): boolean {
   asteroids.sort((a,b) => (a-b));
