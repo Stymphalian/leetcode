@@ -161,8 +161,8 @@ def main() -> int:
 
     workspace_root = Path(__file__).resolve().parents[4]
     problem_dir = workspace_root / "problems" / f"p{number}"
-    # target_file = problem_dir / "main.cs"
-    target_file = problem_dir / "main.ts"
+    target_file = problem_dir / "main.cs"
+    # target_file = problem_dir / "main.ts"
 
     problem_dir.mkdir(parents=True, exist_ok=True)
 
