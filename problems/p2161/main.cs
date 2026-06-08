@@ -1,7 +1,7 @@
 // 2161 Partition Array According to Given Pivot
 // https://leetcode.com/problems/partition-array-according-to-given-pivot/description/
 // Difficulty: Medium
-// Time Taken: HH:MM:SS
+// Time Taken: 00:17:40
 
 public class Solution {
   public int[] PivotArray(int[] nums, int pivot) {
