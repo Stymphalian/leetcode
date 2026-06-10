@@ -7,6 +7,51 @@
 // Need to make observation that l -> r range, as r increases the
 // value can only monotonically increase. f.
 
+
+public class SparseTable {
+  int n;
+  int max_bits;
+  int[,] values;
+  Func<int, int,int> fn;
+  
+  public SparseTable(int[] nums, Func<int, int, int> fn) {
+    n = nums.Length;
+    max_bits = (int) Math.Log2((double) n) + 1;
+    values = new int[max_bits, n];
+    this.fn = fn;    
+
+    _Build(nums);
+  }
+
+  private void _Build(int[] nums) {
+    int n = nums.Length;
+    for(var idx = 0; idx < nums.Length; idx++) {
+      values[0, idx] = nums[idx];
+    }
+
+    int power_2 = 2;
+    for(int row = 1; row < this.max_bits; row++) {
+      int prev_power_2 = power_2 / 2;
+      int col_limit = n - power_2 + 1;
+      for(int col = 0; col < col_limit; col++) {
+        int left = values[row-1, col];
+        int right = values[row-1, col + prev_power_2];
+        values[row,col] = this.fn(left, right);
+      }
+      power_2 *= 2;
+    }
+  }
+
+  public int Search(int left, int right) {
+    int m = right - left + 1;
+    int p = (int) Math.Log2(m);
+    int k = 1 << p; // 2**p;
+    int l = values[p, left];
+    int r = values[p, right  - k + 1];
+    return fn(l, r);
+  }
+}
+
 public abstract class SegmentTree<T> {
   public T[] DP;
   public int N;
