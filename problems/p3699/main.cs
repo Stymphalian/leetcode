@@ -15,32 +15,30 @@ public class Solution {
     int m = r - l;
 
     int[][] dp = new int[m+1][];
-    int[][] sums = new int[m+1][];
+    int[][] next_dp = new int[m+1][];
     for(int idx = 0; idx <= m; idx++) {
-      dp[idx] = new int[2]{1,1};
-    }
-    for(int idx = 0; idx <= m; idx++) {
-      sums[idx] = new int[2];
-      sums[idx][UP] = (idx-1 >= 0 ? sums[idx-1][UP] : 0) + 1;
-      sums[idx][DOWN] = (idx-1 >= 0 ? sums[idx-1][DOWN] : 0) + 1;
+      next_dp[idx] = new int[2];
+      dp[idx] = new int[2];
+      dp[idx][DOWN] = (idx-1 >= 0 ? dp[idx-1][DOWN] : 0) + 1;
+      dp[idx][UP] = (idx-1 >= 0 ? dp[idx-1][UP] : 0) + 1;
     }
 
     for(int ni = 1; ni < n; ni++) {
       for(int col = 0; col <= m; col++) {
-        dp[col][DOWN] = (col-1 >= 0 ? sums[col-1][UP] : 0);
-        dp[col][UP] = (sums[m][DOWN] - sums[col][DOWN] + MOD) % MOD;
+        next_dp[col][UP] = col-1 >= 0 ? dp[col-1][DOWN] : 0;
+        next_dp[col][DOWN] = (dp[m][UP] - dp[col][UP] + MOD) % MOD;
       }
 
       // Prefix sum
-      sums[0][DOWN] = dp[0][DOWN];
-      sums[0][UP] = dp[0][UP];
+      dp[0][UP] = next_dp[0][UP];
+      dp[0][DOWN] = next_dp[0][DOWN];
       for(int col = 1; col <= m; col++) {
-        sums[col][DOWN] = (sums[col-1][DOWN] + dp[col][DOWN]) % MOD;
-        sums[col][UP] = (sums[col-1][UP] + dp[col][UP]) % MOD;
+        dp[col][UP] = (dp[col-1][UP] + next_dp[col][UP]) % MOD;
+        dp[col][DOWN] = (dp[col-1][DOWN] + next_dp[col][DOWN]) % MOD;
       }
     }
 
-    return (sums[m][DOWN] + sums[m][UP]) % MOD;
+    return (dp[m][UP] + dp[m][DOWN]) % MOD;
   }
 }
 
